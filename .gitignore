@@ -1,2 +1,6 @@
+# config / credentials
 .env
-.terraform
+
+# Terraform
+/.terraform
+terraform.tfstate*

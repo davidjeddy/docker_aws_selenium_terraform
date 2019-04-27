@@ -16,7 +16,7 @@ terraform init
 cp .env.dist .env
 # open and provide values
 terraform plan --out ./out.plan -var-file=.env
-terraform apply
+terraform apply -lock=true ./out.plan
 ```
 
 # Prereq

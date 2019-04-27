@@ -6,7 +6,7 @@ module "ec2_cluster" {
 
   instance_count         = 1
 
-  ami                    = "ami-06397100adf427136"
+  ami                    = "${data.aws_ami.latest-ubuntu.id}"
   instance_type          = "t2.micro"
   key_name               = "${var.AWS_PEM_KEY}"
   monitoring             = true
@@ -17,7 +17,7 @@ module "ec2_cluster" {
 
   tags = {
     Terraform = "true"
-    Environment = "dev"
+    Environment = "${var.APP_ENV}"
     Name                   = "Selenium Grid"
   }
 }

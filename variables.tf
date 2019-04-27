@@ -1,3 +1,7 @@
+variable "APP_ENV" {
+  
+}
+
 variable "AWS_REGION" {
   
 }
