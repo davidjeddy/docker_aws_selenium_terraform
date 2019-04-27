@@ -1,22 +1,23 @@
-module "ec2" {
-  source  = "github.com/terraform-aws-modules/terraform-aws-ec2-instance"
-  version = "1.12.0"
 
-  name           = "Selenium Grid"
-  instance_count = 1
 
-  ami           = "${data.aws_ami.latest-ubuntu.value}"
-  instance_type = "t2.micro"
-  key_name      = "user1"
-  monitoring    = true
+module "ec2_cluster" {
+  source                 = "terraform-aws-modules/ec2-instance/aws"
+  version                = "1.21.0"
 
-  vpc_security_group_ids = [
-    "${aws_default_security_group.default.id}",
-  ]
+  instance_count         = 1
+
+  ami                    = "ami-06397100adf427136"
+  instance_type          = "t2.micro"
+  key_name               = "${var.AWS_PEM_KEY}"
+  monitoring             = true
+  vpc_security_group_ids = ["${aws_default_security_group.default.id}"]
+  subnet_id              = "${var.AWS_SUBNET}"
+
+  name                   = "Selenium Grid"
 
   tags = {
-    Terraform   = "true"
+    Terraform = "true"
     Environment = "dev"
-    Name        = "Selenium Grid"
+    Name                   = "Selenium Grid"
   }
 }

@@ -8,13 +8,15 @@ ADSL
 git clone ...
 cd ./...
 terraform init
-terraform plan --out
-terraform apply
 ```
 
 # Usage
 
 ```bash
+cp .env.dist .env
+# open and provide values
+terraform plan --out ./out.plan -var-file=.env
+terraform apply
 ```
 
 # Prereq
