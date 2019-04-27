@@ -9,22 +9,29 @@ resource "aws_default_security_group" "default" {
 
   ingress {
     protocol  = "TCP"
-    self      = true
     from_port = 22
     to_port   = 22
+    cidr_blocks = ["${chomp(data.http.myip.body)}/32"]
   }
 
-  egress {
+  ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "TCP"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress {
+  ingress {
     from_port   = 4444
     to_port     = 4444
     protocol    = "TCP"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
   }
 }

@@ -1,8 +1,10 @@
 
 
-module "ec2_cluster" {
+module "selenium_grid_host" {
   source                 = "terraform-aws-modules/ec2-instance/aws"
   version                = "1.21.0"
+
+  associate_public_ip_address = true
 
   instance_count         = 1
 
