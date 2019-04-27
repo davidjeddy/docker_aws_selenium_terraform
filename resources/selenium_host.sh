@@ -1,5 +1,5 @@
 #!/bin/bash +xe
-echo "Installing Docker (CE) on Ubuntu 18.04"
+echo "Installing Docker (CE) on Selenium Grid Ubuntu 18.04 host"
 lsb_release -r
 
 apt update -y
