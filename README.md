@@ -11,25 +11,42 @@ An example configuration demonstrating Selenium Grid via Docker on AWS via Terra
 ## Install
 
 ```bash
-git clone ...
-cd ./...
+git clone https://github.com/davidjeddy/docker_aws_selenium_terraform.git
+cd ./docker_aws_selenium_terraform
 cp .env.dist .env
-# open and provide values, save and exit editor
+vim .env
 terraform init
 ```
 
 ## Execution
 
 ```bash
+# build Terraform plan file
 terraform plan --out ./out.plan -var-file=.env
+
+# apply Terraform plan file
 terraform apply -lock=true ./out.plan
-ssh -i ~/.ssh/$(terraform output "SSH pem key").pem ubuntu@$(terraform output "Web App Public DNS") "cd /home/ubuntu/spring-petclinic && sudo mvn test -Dtest=SeleniumExampleTest -DSG_FQDN=\"$(terraform output "Selenium Grid Public DNS")\" -DWEB_APP_FQDN=\"$(terraform output "Web App Public DNS")\""
+
+# copy setup script for Selenium to remote host
+scp -i ~/.ssh/$(terraform output "SSH pem key").pem -oStrictHostKeyChecking=no ./resources/selenium.sh ubuntu@$(terraform output "Selenium Grid Public DNS"):/home/ubuntu/selenium.sh
+
+# ...  and execute
+ssh -i ~/.ssh/$(terraform output "SSH pem key").pem -oStrictHostKeyChecking=no ubuntu@$(terraform output "Selenium Grid Public DNS") "chmod +x /home/ubuntu/selenium.sh && sudo /home/ubuntu/selenium.sh"
+
+# copy setup script for Web App to remote host
+scp -i ~/.ssh/$(terraform output "SSH pem key").pem -oStrictHostKeyChecking=no ./resources/web_app.sh ubuntu@$(terraform output "Web App Public DNS"):/home/ubuntu/web_app.sh
+
+# ...  and execute
+ssh -i ~/.ssh/$(terraform output "SSH pem key").pem -oStrictHostKeyChecking=no ubuntu@$(terraform output "Web App Public DNS") "chmod +x /home/ubuntu/web_app.sh && cd /home/ubuntu/ && sudo ./web_app.sh"
+
+# Run Selenium tests from Web App host to Selenium Grid host
+ssh -i ~/.ssh/$(terraform output "SSH pem key").pem -oStrictHostKeyChecking=no ubuntu@$(terraform output "Web App Public DNS") "cd /home/ubuntu/spring-petclinic && sudo mvn test -Dtest=SeleniumExampleTest -DSG_FQDN=\"$(terraform output "Selenium Grid Public DNS")\" -DWEB_APP_FQDN=\"$(terraform output "Web App Public DNS")\""
 ```
 
 ## Remove
 
 ```bash
-terraform destroy  -var-file=.env
+terraform destroy -auto-approve -var-file=.env
 ```
 
 # Prereq

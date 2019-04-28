@@ -51,4 +51,3 @@ services:
       - HUB_PORT=4444' > docker-compose.yml
 
 docker-compose up -d
-docker-compose logs -f
