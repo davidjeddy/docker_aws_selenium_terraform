@@ -1,29 +1,35 @@
-ADSL
+DAST
 
-(AWS + Docker + Selenium (Grid) + Terrform)
+(Docker + AWS + Selenium (Grid) + Terrform)
 
 # About
 
-A Selenium Grid example and a Java web app example usage.
+An example configuration demonstrating Selenium Grid via Docker on AWS via Terraform for IaC.
 
-# Install
+# Usage
+
+## Install
 
 ```bash
 git clone ...
 cd ./...
+cp .env.dist .env
+# open and provide values, save and exit editor
 terraform init
 ```
 
-# Usage
+## Execution
 
 ```bash
-cp .env.dist .env
-# open and provide values, save and exit editor
-
 terraform plan --out ./out.plan -var-file=.env
 terraform apply -lock=true ./out.plan
-
 ssh -i ~/.ssh/$(terraform output "SSH pem key").pem ubuntu@$(terraform output "Web App Public DNS") "cd /home/ubuntu/spring-petclinic && sudo mvn test -Dtest=SeleniumExampleTest -DSG_FQDN=\"$(terraform output "Selenium Grid Public DNS")\" -DWEB_APP_FQDN=\"$(terraform output "Web App Public DNS")\""
+```
+
+## Remove
+
+```bash
+terraform destroy  -var-file=.env
 ```
 
 # Prereq
@@ -31,11 +37,3 @@ ssh -i ~/.ssh/$(terraform output "SSH pem key").pem ubuntu@$(terraform output "W
 - [Linux Terminal](https://en.wikipedia.org/wiki/Linux_console)
 - [SSH](https://en.wikipedia.org/wiki/Secure_Shell)
 - [Terraform](https://en.wikipedia.org/wiki/Terraform_(software))
-
-
-# Remove
-
-```bash
-
-terraform destroy  -var-file=.env
-```

@@ -1,6 +1,6 @@
 # config / credentials
 .env
-
+*.plan
 # Terraform
 /.terraform
 terraform.tfstate*
