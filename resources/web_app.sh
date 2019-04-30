@@ -1,5 +1,5 @@
 #!/bin/bash +xe
-echo "Installing Docker (CE) on Web App Ubuntu 18.04 host"
+echo "Installing Java Web App on host"
 lsb_release -r
 
 apt update -y
